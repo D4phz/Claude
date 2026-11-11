@@ -8,6 +8,8 @@ Config.setOverwriteOutput(true);
 // machine, including headless servers without a GPU. On a machine with a GPU,
 // pass --gl=angle for faster renders.
 Config.setChromiumOpenGlRenderer("swangle");
+// Software WebGL is memory-hungry; higher concurrency can crash the page.
+Config.setConcurrency(2);
 
 // Use a locally installed Chromium when one is available (e.g. cloud sessions
 // with Playwright's browser), instead of downloading Chrome Headless Shell.
