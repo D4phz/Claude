@@ -1,4 +1,4 @@
-import { Pix, bayer, hash, mix, type RGB } from "./engine";
+import { Pix, SOFT, bayer, hash, mix, type RGB } from "./engine";
 import { P } from "./palette";
 
 /** Integer-scaled blit (close-ups keep crisp square pixels). */
@@ -67,13 +67,18 @@ export const vignette = (px: Pix, k: number, c: RGB = P.ink) => {
       const dx = (x - px.w / 2) / (px.w / 2);
       const dy = (y - px.h / 2) / (px.h / 2);
       const d = Math.sqrt(dx * dx * 0.9 + dy * dy * 0.7);
-      if (bayer(x, y) < (d - 1 + k) * 1.4) px.set(x, y, c);
+      if (SOFT.on) px.set(x, y, c, Math.max(0, Math.min(255, (d - 1 + k) * 1.4 * 255)));
+      else if (bayer(x, y) < (d - 1 + k) * 1.4) px.set(x, y, c);
     }
 };
 
 /** Dither dissolve to a colour (0 = none, 1 = full). */
 export const dissolve = (px: Pix, k: number, c: RGB = P.ink) => {
   if (k <= 0) return;
+  if (SOFT.on) {
+    for (let y = 0; y < px.h; y++) for (let x = 0; x < px.w; x++) px.set(x, y, c, Math.min(255, k * 255));
+    return;
+  }
   for (let y = 0; y < px.h; y++) for (let x = 0; x < px.w; x++) if (bayer(x, y) < k) px.set(x, y, c);
 };
 

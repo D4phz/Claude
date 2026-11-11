@@ -29,6 +29,9 @@ export const ease = (t: number) => {
 };
 export const easeOut = (t: number) => 1 - Math.pow(1 - clamp01(t), 3);
 
+/** Soft mode: glows, fog and fades blend smoothly instead of dithering. */
+export const SOFT = { on: false };
+
 export class Pix {
   data: Uint8ClampedArray<ArrayBuffer>;
   /** Colour filter applied on set(): used for decay / tint effects. */
@@ -100,7 +103,9 @@ export class Pix {
     for (let y = Math.floor(cy - r); y <= cy + r; y++)
       for (let x = Math.floor(cx - r); x <= cx + r; x++) {
         const d = Math.hypot(x - cx, y - cy) / r;
-        if (d < 1 && bayer(x, y) < (1 - d) * (1 - d) * k) this.set(x, y, c);
+        if (d >= 1) continue;
+        if (SOFT.on) this.set(x, y, c, Math.min(255, (1 - d) * (1 - d) * k * 200));
+        else if (bayer(x, y) < (1 - d) * (1 - d) * k) this.set(x, y, c);
       }
   }
   line(x0: number, y0: number, x1: number, y1: number, c: RGB) {
@@ -197,7 +202,8 @@ export const fog = (px: Pix, y: number, h: number, t: number, c: RGB, k: number,
     const fy = 1 - Math.abs(yy - y) / h;
     for (let x = 0; x < px.w; x++) {
       const n = noise1((x + t * speed) / 22, seed) * 0.6 + noise1((x - t * speed * 0.6) / 9, seed + 1) * 0.4;
-      if (bayer(x, yy) < fy * n * k) px.set(x, yy, c);
+      if (SOFT.on) px.set(x, yy, c, Math.min(255, fy * n * k * 190));
+      else if (bayer(x, yy) < fy * n * k) px.set(x, yy, c);
     }
   }
 };

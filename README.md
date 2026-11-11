@@ -35,6 +35,12 @@ npm run still      # out/shader-intro.png
   sprite and portrait (`chars.ts`), fixed locations (`places.ts`) and effects
   with consistent rules (`fx.ts`). Ambience/music from
   `node scripts/make-castillo-audio.mjs`.
+- **`Sueno`** (~8 min, 1080×1920): the full dream "El castillo que siempre
+  regresa" in five chapters, text narration only. Pixel art at 270×480 (4×)
+  with a skeletal character rig (`src/sueno/figure.ts`), one cast sheet
+  (`cast.ts`), fixed sets (`sets.ts`), 109 shots (`shots.ts`, `timeline.ts`).
+  Soundtrack from the same timeline: `node scripts/make-sueno-audio.mjs`.
+  Review: `node scripts/sueno-sheet.mjs out/sheet.png`.
 - **`ShaderIntro`**: the starter example below.
 
 The example composition `ShaderIntro` (`src/ShaderIntro.tsx`) puts a title over an
