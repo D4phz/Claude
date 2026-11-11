@@ -12,6 +12,16 @@ npm run render     # out/shader-intro.mp4
 npm run still      # out/shader-intro.png
 ```
 
+### Compositions
+
+- **`PandaWalk`** (10 s): a pixel-art panda walking slowly through a moonlit
+  bamboo valley with a lo-fi chill soundtrack. Render with
+  `npx remotion render PandaWalk out/panda-walk.mp4`. The art is drawn on a
+  240×135 canvas (`src/panda/`) and scaled 8× with nearest-neighbour filtering;
+  the sky is a Paper Shaders `Dithering` layer at the same pixel size. The music
+  is synthesized by `node scripts/make-chill-audio.mjs` into `public/chill.wav`.
+- **`ShaderIntro`**: the starter example below.
+
 The example composition `ShaderIntro` (`src/ShaderIntro.tsx`) puts a title over an
 animated Paper Shaders mesh gradient. `src/lib/usePaperShader.ts` makes any Paper
 Shader frame-accurate in Remotion.
