@@ -189,8 +189,11 @@ function drawScene(px: Pix, t: number, dist: number, walking: number, blink: boo
 
   // Foreground bamboo, passing faster than the camera.
   const fOff = cam * 1.5;
-  for (let i = Math.floor(fOff / 150) - 1; i < Math.floor((fOff + LW) / 150) + 2; i++) {
-    const x = Math.round(i * 150 + 20 + hash(i + 600) * 30 - fOff);
+  // Placed so the panda is clear at the start and at the stop, with one stalk
+  // passing in front mid-walk.
+  const FG_STALKS = [12, 120, 232, 330];
+  for (let i = 0; i < FG_STALKS.length; i++) {
+    const x = Math.round(FG_STALKS[i] - fOff);
     for (let y = 0; y < LH; y++) {
       const node = (y + i * 5) % 16 === 0;
       px.rect(x, y, 5, 1, node ? C.fgNode : C.fgBamboo);
