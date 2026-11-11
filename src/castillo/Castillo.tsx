@@ -381,7 +381,7 @@ const SHOTS: Shot[] = [
       desaturate(px, 0.35);
       vignette(px, 0.25 + p * 0.25);
     },
-    text: "Antes de morir, vio a cuatro jóvenes *entrar al bosque*.",
+    text: "Antes de morir, los vio *entrar al bosque*.",
   },
   // 52–54 · EL RECONOCIMIENTO · repetición visual
   {
@@ -544,13 +544,13 @@ const ShotView: React.FC<{ shot: Shot }> = ({ shot }) => {
   );
 };
 
-export const Castillo: React.FC = () => (
+export const Castillo: React.FC<{ audio?: string }> = ({ audio = "castillo-audio.wav" }) => (
   <AbsoluteFill style={{ backgroundColor: "#0a0b16" }}>
     {SHOTS.map((s, i) => (
       <Sequence key={i} from={i * SHOT} durationInFrames={SHOT} name={`${i * 2}–${i * 2 + 2}s`}>
         <ShotView shot={s} />
       </Sequence>
     ))}
-    <Audio src={staticFile("castillo-audio.wav")} />
+    <Audio src={staticFile(audio)} />
   </AbsoluteFill>
 );
