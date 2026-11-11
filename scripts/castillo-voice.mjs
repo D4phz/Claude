@@ -95,22 +95,25 @@ if (cmd === "voices") {
     }
     files.push(f);
   }
-  // Schedule: each line starts at its beat (+0.15 s) or right after the previous one.
-  // Lines that would push the next one more than 0.5 s late are sped up (max 1.2x).
+  // Schedule: narrate the lines that fit (the rest stay as on-screen text),
+  // each at its beat or right after the previous one, at near-natural speed.
+  // [line index, earliest start (s), tempo]
+  const PLAN = [
+    [0, 0.15, 1], [1, 2.4, 1.15], [2, 5.1, 1], [4, 8.15, 1], [5, 11.0, 1], [6, 12.2, 1.05],
+    [7, 14.2, 1], [8, 16.5, 1], [9, 19.8, 1], [11, 22.0, 1.05], [12, 24.3, 1.15], [13, 27.4, 1],
+    [14, 29.0, 1.1], [16, 32.5, 1], [17, 34.55, 1], [18, 36.3, 1], [19, 38.15, 1], [20, 40.7, 1],
+    [22, 44.1, 1.1], [24, 48.1, 1], [25, 50.25, 1.05], [26, 52.6, 1], [27, 54.3, 1], [28, 56.45, 1.1], [29, 58.2, 1.1],
+  ];
   let prevEnd = 0;
   const parts = [];
-  for (let i = 0; i < files.length; i++) {
-    const beat = i * 2 + (i === LINES.length - 1 ? 0.6 : 0.15);
-    const start = Math.max(beat, prevEnd + 0.08);
-    const nextBeat = (i + 1) * 2 + 0.5;
-    let d = dur(files[i]);
-    let tempo = 1;
-    if (i < files.length - 1 && start + d > nextBeat) tempo = Math.min(1.2, d / Math.max(0.5, nextBeat - start));
-    d /= tempo;
+  for (const [i, at, tempo] of PLAN) {
+    const start = Math.max(at, prevEnd + 0.06);
+    const d = dur(files[i]) / tempo;
     parts.push({ f: files[i], start, tempo });
     prevEnd = start + d;
-    console.log(`${String(i).padStart(2)} ${start.toFixed(2)}s +${d.toFixed(2)}s${tempo > 1 ? ` x${tempo.toFixed(2)}` : ""}  ${LINES[i]}`);
+    console.log(`${String(i).padStart(2)} ${start.toFixed(2)}s → ${prevEnd.toFixed(2)}s${tempo > 1 ? ` x${tempo}` : ""}  ${LINES[i]}`);
   }
+  if (prevEnd > 60) console.warn("WARNING: narration runs past 60 s");
   // Narration track (60 s), then duck the ambience under it.
   const inputs = parts.flatMap((p) => ["-i", p.f]);
   const chains = parts.map((p, i) => `[${i}:a]aresample=44100,atempo=${p.tempo.toFixed(3)},adelay=${Math.round(p.start * 1000)}|${Math.round(p.start * 1000)},aformat=channel_layouts=stereo[a${i}]`);
