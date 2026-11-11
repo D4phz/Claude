@@ -1,0 +1,27 @@
+{
+  "name": "claude-remotion-studio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Remotion video project with Paper Shaders, HyperFrames, Lemo-Opuscar and Claude Animation Base skills",
+  "scripts": {
+    "dev": "remotion studio",
+    "render": "remotion render ShaderIntro out/shader-intro.mp4",
+    "still": "remotion still ShaderIntro out/shader-intro.png --frame=60",
+    "typecheck": "tsc --noEmit",
+    "hyperframes": "hyperframes"
+  },
+  "dependencies": {
+    "@paper-design/shaders": "0.0.82",
+    "@paper-design/shaders-react": "0.0.82",
+    "@remotion/cli": "^4.0.542",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "remotion": "^4.0.542"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "hyperframes": "^0.9.33",
+    "typescript": "^5.9.3"
+  }
+}
