@@ -11,16 +11,22 @@
     "hyperframes": "hyperframes"
   },
   "dependencies": {
+    "@fontsource/inter": "^5.3.0",
+    "@fontsource/montserrat": "^5.3.0",
     "@paper-design/shaders": "0.0.82",
     "@paper-design/shaders-react": "0.0.82",
+    "@react-three/fiber": "^9.8.2",
     "@remotion/cli": "^4.0.542",
+    "@remotion/three": "^4.0.542",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
-    "remotion": "^4.0.542"
+    "remotion": "^4.0.542",
+    "three": "^0.187.0"
   },
   "devDependencies": {
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
+    "@types/three": "^0.187.0",
     "hyperframes": "^0.9.33",
     "typescript": "^5.9.3"
   }

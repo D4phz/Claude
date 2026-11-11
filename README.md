@@ -20,6 +20,15 @@ npm run still      # out/shader-intro.png
   240×135 canvas (`src/panda/`) and scaled 8× with nearest-neighbour filtering;
   the sky is a Paper Shaders `Dithering` layer at the same pixel size. The music
   is synthesized by `node scripts/make-chill-audio.mjs` into `public/chill.wav`.
+- **`CamaAmarilla`** (54 s, 1080×1920; `CamaAmarilla16x9` for landscape): a
+  3D science-documentary short in Spanish, "¿Por qué el lado de la cama de un
+  hombre se pone amarillo?". Three.js scenes via `@remotion/three` (bedroom,
+  skin macro, fabric fibres, mattress layers) in `src/cama/`, a visual change
+  every 2 s, kinetic captions and sound design from
+  `node scripts/make-cama-audio.mjs`. Render with
+  `npx remotion render CamaAmarilla out/cama-amarilla.mp4`.
+  `node scripts/contact-sheet.mjs CamaAmarilla out/sheet.png` renders one still
+  per beat for review.
 - **`ShaderIntro`**: the starter example below.
 
 The example composition `ShaderIntro` (`src/ShaderIntro.tsx`) puts a title over an
