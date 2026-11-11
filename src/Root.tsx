@@ -2,6 +2,8 @@ import { Composition } from "remotion";
 import { ShaderIntro } from "./ShaderIntro";
 import { PandaWalk } from "./panda/PandaWalk";
 import { CamaTest } from "./cama/Test";
+import { CastilloTest } from "./castillo/Test";
+import { Castillo, CASTILLO_FRAMES } from "./castillo/Castillo";
 import { CamaAmarilla, TOTAL_FRAMES } from "./cama/CamaAmarilla";
 
 export const RemotionRoot: React.FC = () => {
@@ -9,6 +11,8 @@ export const RemotionRoot: React.FC = () => {
     <>
       <Composition id="CamaAmarilla" component={CamaAmarilla} durationInFrames={TOTAL_FRAMES} fps={30} width={1080} height={1920} />
       <Composition id="CamaAmarilla16x9" component={CamaAmarilla} durationInFrames={TOTAL_FRAMES} fps={30} width={1920} height={1080} />
+      <Composition id="Castillo" component={Castillo} durationInFrames={CASTILLO_FRAMES} fps={30} width={1080} height={1920} />
+      <Composition id="CastilloTest" component={CastilloTest} durationInFrames={60} fps={30} width={1080} height={1920} />
       <Composition id="CamaTest" component={CamaTest} durationInFrames={60} fps={30} width={1080} height={1920} defaultProps={{ shot: "wide" }} />
       <Composition
         id="PandaWalk"

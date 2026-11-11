@@ -29,6 +29,12 @@ npm run still      # out/shader-intro.png
   `npx remotion render CamaAmarilla out/cama-amarilla.mp4`.
   `node scripts/contact-sheet.mjs CamaAmarilla out/sheet.png` renders one still
   per beat for review.
+- **`Castillo`** (60 s, 1080×1920): "El castillo que siempre regresa", a
+  pixel-art dark-fantasy short. Drawn on a 180×320 canvas scaled 6× with a
+  fixed palette (`src/castillo/palette.ts`), one character sheet used by every
+  sprite and portrait (`chars.ts`), fixed locations (`places.ts`) and effects
+  with consistent rules (`fx.ts`). Ambience/music from
+  `node scripts/make-castillo-audio.mjs`.
 - **`ShaderIntro`**: the starter example below.
 
 The example composition `ShaderIntro` (`src/ShaderIntro.tsx`) puts a title over an
