@@ -6,29 +6,34 @@ import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } fr
 // glossy floor reflection, dust, word-by-word captions.
 
 export const GOLD = "#ffe39a";
-export const glowFilter = (k = 1): CSSProperties => ({
-  filter: `drop-shadow(0 0 ${4 * k}px #ffcf6a) drop-shadow(0 0 ${14 * k}px #ff9d2e) drop-shadow(0 0 ${30 * k}px rgba(255,140,40,0.45))`,
-});
+/** Per-layer glow is applied once by <Stage>; kept as a no-op for API compatibility. */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const glowFilter = (_k = 1): CSSProperties => ({});
+const STAGE_GLOW = "drop-shadow(0 0 5px #ffcf6a) drop-shadow(0 0 20px rgba(255,150,45,0.75))";
 export const stroke = { stroke: GOLD, strokeWidth: 6, strokeLinejoin: "round" as const, strokeLinecap: "round" as const };
 
 export const Stage: React.FC<{ children: ReactNode; floor?: number; camera?: string }> = ({ children, floor = 1480, camera }) => (
   <AbsoluteFill style={{ background: "radial-gradient(ellipse at 50% 40%, #1a1714 0%, #0d0c0e 55%, #070708 100%)" }}>
     <Dust />
     <AbsoluteFill style={{ transform: camera, transformOrigin: "50% 60%" }}>
-      <AbsoluteFill>{children}</AbsoluteFill>
-      {/* mirror reflection on a glossy floor: flip around the floor line, keep only what was just above it */}
-      <AbsoluteFill
+      {/* everything above the floor, mirrored by the browser on the glossy floor.
+          The glow halo is blurred at 1/4 resolution and scaled up (fast without a GPU). */}
+      <div
         style={{
-          transform: "scaleY(-1)",
-          transformOrigin: `50% ${floor}px`,
-          opacity: 0.38,
-          maskImage: `linear-gradient(to bottom, transparent ${floor - 320}px, black ${floor}px, transparent ${floor + 1}px)`,
-          WebkitMaskImage: `linear-gradient(to bottom, transparent ${floor - 320}px, black ${floor}px, transparent ${floor + 1}px)`,
-          filter: "blur(2px)",
-        }}
+          position: "absolute",
+          left: 0,
+          top: 0,
+          width: 1080,
+          height: floor,
+          overflow: "hidden",
+          WebkitBoxReflect: "below 0 linear-gradient(transparent 78%, rgba(255,255,255,0.32))",
+        } as CSSProperties}
       >
-        {children}
-      </AbsoluteFill>
+        <div style={{ position: "absolute", left: 0, top: 0, width: 270, height: floor / 4, transform: "scale(4)", transformOrigin: "0 0", willChange: "transform", opacity: 1, mixBlendMode: "screen" }}>
+          <div style={{ width: 1080, height: floor, transform: "scale(0.25)", transformOrigin: "0 0", filter: "blur(7px) brightness(2.3) saturate(1.5)" }}>{children}</div>
+        </div>
+        <div style={{ position: "absolute", inset: 0, filter: "drop-shadow(0 0 3px #ffcf6a)" }}>{children}</div>
+      </div>
       <div style={{ position: "absolute", left: 0, right: 0, top: floor, height: 2, background: "linear-gradient(90deg, transparent, rgba(255,210,140,0.35), transparent)" }} />
       <div style={{ position: "absolute", left: 0, right: 0, top: floor, bottom: 0, background: "linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(5,5,6,0.35) 50%, rgba(5,5,6,0.85) 100%)" }} />
     </AbsoluteFill>
