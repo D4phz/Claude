@@ -69,7 +69,13 @@ export const Captions: React.FC<{ words: Word[]; chunk?: number }> = ({ words, c
   let idx = -1;
   for (let i = 0; i < words.length; i++) if (words[i].start <= t + 0.02) idx = i;
   if (idx < 0) return null;
-  const c0 = Math.floor(idx / chunk) * chunk;
+  // chunks of up to `chunk` words that never cross a sentence end
+  const starts: number[] = [0];
+  for (let i = 1; i < words.length; i++) {
+    const prevEnds = /[.?!…]$/.test(words[i - 1].w);
+    if (prevEnds || i - starts[starts.length - 1] >= chunk) starts.push(i);
+  }
+  const c0 = starts.filter((s0) => s0 <= idx).pop() ?? 0;
   const shown = words.slice(c0, idx + 1);
   return (
     <div style={{ position: "absolute", left: 90, right: 90, top: 190, fontFamily: "Montserrat", fontWeight: 800, fontSize: 104, lineHeight: 1.08, letterSpacing: -2 }}>
